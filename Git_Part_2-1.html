@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Git Part 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Git_Part_2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Git_Part_2_files/libs/quarto-html/quarto.js"></script>
+<script src="Git_Part_2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Git_Part_2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Git_Part_2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Git_Part_2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Git_Part_2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Git_Part_2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Git_Part_2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Git_Part_2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Git Part 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="git-commands" class="level1">
+<h1>GIT COMMANDS</h1>
+<ul>
+<li>How to take snapshots of our project?</li>
+</ul>
+<ol type="1">
+<li>Create a directory for our project. So Let us create a directory called <code>Hamid</code><br>
+You need to type
+<ul>
+<li><code>mkdir Hamid</code> , where <code>mkdir</code> means “Make Directory” and go to this directory.</li>
+<li><code>cd Hamid</code>, where <code>cd</code> stands for “Change Directory”. Now we can have our files in it.</li>
+</ul></li>
+<li>We want add files to a Git repository. We have to initialize a new empty repository.
+<ul>
+<li>So we type <code>git init</code></li>
+<li>The <code>git init</code> is a one-time command you use during the initial setup of a new repo. Executing this command will create a new <code>. git</code> subdirectory in your current working directory.</li>
+</ul></li>
+</ol>
+<p>Now we have initialized empty Git repository in our directory.<br>
+Inside of our directory we have a sub directory called <code>.git</code>. By default this sub directory is hidden because you are not suppose to touch it.<br>
+Type <code>ls</code> it will provide all files and sub directories in your directory. You don’t see anything. We have not add any file yet and the sub directory <code>.git</code> is hidden.<br>
+</p>
+<p>If you type <code>ls -a</code> where “a” is short for “all”, you will all files as well as the <code>.git</code> sub directory.</p>
+<ul>
+<li><p>Windows: You can open this with windows explorer or file explorer. Type <code>start .git</code></p></li>
+<li><p>Mac: You can open this with “finder”. Type <code>open .git</code></p></li>
+<li><p>Linux: Tupe <code>xdg-open .git</code></p></li>
+</ul>
+<p>This is where stored information about our project history. So, we have directories like hooks, info, objects and references. This is how git stores information. That is why this directory is hidden. If you remove or crop this directory you are going to lose your project history. If you type <code>rm -rf .git</code> Now you do not have a git repository anymore. Since we have removed it we need to initialize it again. <code>git init</code><br>
+</p>
+<ul>
+<li><p><code>ls</code> it will provide list of all visible files and sub directories in your directory<br>
+</p></li>
+<li><p><code>ls -a</code> It will provide all files as well as hidden<br>
+</p></li>
+<li><p><code>ls -la</code> It will provide all files indirectory that start with dot<br>
+</p></li>
+<li><p>We have created our first git project and we initialized it and we saw that it created a <code>.git</code> directory inside of our folder (directory).&nbsp;</p></li>
+<li><p><strong>Dot files are invisible file.</strong> How to look at inside of <code>.git</code>? Type <code>ls -la .git</code><br>
+The result of these code gives us all the files that Git using to do the all the tracking. We are not using any of these files except <code>config</code> file. Type <code>cat .git/config</code>, where cat is short for concatenation and <code>.git/config</code> shows you the content of the file.<br>
+Once again if you remove or delete <code>.git</code> Git will be removed from the project. It will no longer tracking. There will be no tracking information left anywhere on your hard drive.<br>
+Now we need to talk about basic Git WorkFlow</p></li>
+</ul>
+<section id="git-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="git-workflow">GIT WORKFLOW</h2>
+<section id="the-three-trees" class="level3">
+<h3 class="anchored" data-anchor-id="the-three-trees">THE THREE TREES</h3>
+<p>Lots of other version controls are Two Trees architecture. “Working Directory” and “Repository”. Git has Three Trees. “Working Directory”, “Staging Area, or Index” and “Repository.”</p>
+<ul>
+<li>Imagine we have a file “A” in the “working directory” (<span class="math inline">\(v_1\)</span>). We use <code>git add</code> command to move it to the “staging directory”. Now we use <code>git  commit</code> to push itto the “repository”.<br>
+Now repository have the same file and it is the same version as it is in our staging directory and working directory.</li>
+<li>Now we have done some changes to “A”. Let us called it “B”., now in working directory we have “B” (<span class="math inline">\(v_2\)</span>). Let us adding it to the staging index and push it to the repository.<br>
+</li>
+<li>Now the repository has two set of changes set “A” and “B”.<br>
+</li>
+<li>The same process, Let us we do some changes in working directory and have file “C” (<span class="math inline">\(v_3\)</span>). These are typical workflow, we are going to be using to make <code>commits</code>. You may use <code>git log</code> to view those commands. To see what was the changes between each one.</li>
+<li>Git does not store duplicate content and also it compresses the content. So, it does not take as much as store you may think.</li>
+</ul>
+</section>
+</section>
+<section id="hash-values" class="level2">
+<h2 class="anchored" data-anchor-id="hash-values">HASH VALUES</h2>
+<p>We have shown each changes with “A” and “B” and “C”.<br>
+</p>
+<ul>
+<li><p>Git generates a “Checksum” for each change set.</p></li>
+<li><p>Checksum is a number that is generated by taking data and feeding it into a mathematical algorithm. So, the checksum converts data into a simple number. <strong>Same data always equal to the same checksum</strong>.<br>
+</p></li>
+<li><p>The checksum is used to guarantee the data integrity.<br>
+</p></li>
+<li><p>The Data Integrity is the fundamentally built-into git.<br>
+</p></li>
+<li><p>So, each “HASH value” is unique and directly tied to the contents that are inside of it.<br>
+</p></li>
+<li><p>The algorithm that git is uses is “SHA-1” (HASH algorithm).<br>
+</p></li>
+<li><p>Git also does something else with data integrity. In addition to use the code in each of snapshots (A, B, and C). It also uses “Metadata”. That means you CAN NOT change the commit message or commit author or parent of the commit without changing its SHA value.</p></li>
+</ul>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">EXAMPLE</h3>
+<p>Let us add a cople of files to our project. We use a standard unix command called <code>echo</code>. We use it to write a content to a file. Let us write “hello”.<br>
+</p>
+<ul>
+<li><p>Type <code>echo hello &gt; file1.txt</code>. where ‘echo’ means to write “hello” and <code>&gt;</code> means “to” the file “file1.txt”.</p></li>
+<li><p>Type <code>echo hello &gt; file2.txt</code>.</p>
+<ul>
+<li>Please note that, git does not automatically track your files so we have to instruct git to track them.<br>
+</li>
+<li>Working Directory is the only Tree in git architecture that does not require a git command to move file changes to that tree.</li>
+</ul></li>
+<li><p>Type <code>git status</code> to get the status of <strong>Working directory</strong>. “Working Tree is clean”means working tree is matches with what in repository.</p>
+<ul>
+<li><p>files are in <strong>on branch master</strong></p></li>
+<li><p><strong>No Commit</strong> yet</p></li>
+<li><p>We see that both of these files are in red font. which means they are not tracked yet.</p></li>
+<li><p>They are not on the <strong>staging area</strong>. So, we need to type</p>
+<ul>
+<li><p><code>git add file1.txt</code> one by one or we can have multiple file separated by space<br>
+</p></li>
+<li><p><code>git add file1.txt file2.txt</code>.<br>
+</p></li>
+<li><p>We may use <code>git add .</code> this stage <strong>all</strong> files ( that are not in the <code>.gitignore</code>) in the entire repository. We have to becareful with that because there might be files that you do not want to your repository.<br>
+</p></li>
+<li><p>We also can use patterns such as <code>git add *.txt</code>. It will stage all files that have extension txt.</p></li>
+</ul></li>
+</ul>
+<p>If you type <code>git status</code> you will see those two files now in green. Which it means they are in the staging index.<br>
+</p></li>
+</ul>
+</section>
+<section id="edit-files" class="level3">
+<h3 class="anchored" data-anchor-id="edit-files">EDIT FILES</h3>
+<p>If we edit a file and type <code>git status</code>. We get a message like<br>
+<strong>Changes not staged for commit:</strong><br>
+<strong>( SOMETHING WRITTEN HERE )</strong><br>
+<strong>( SOMETHING WRITTEN HERE )</strong><br>
+<strong>midified: [name of the file modified in red font]</strong></p>
+<p>The process of adding an edited file is exactly same as adding a new file.</p>
+<p>Let us modify the file1.txt. Type <code>echo  world &gt;&gt; file1.txt</code> where <code>&gt;&gt;</code> means “append” (add as an attachment or supplement). Now let us run <code>git status</code>. It shows we have to tracked files (in the staging area) and one modified in working directory file. We have file1 in the staging area but we have modified the file1 and the modified or second version of file is in the working directory. So there are some changes that are not staged yet. We need to run <code>git add file1.txt</code> now look at the status of our working directory. Both of these files are in the staging area. And we don’t have any unstated changes.</p>
+</section>
+<section id="commit" class="level3">
+<h3 class="anchored" data-anchor-id="commit">COMMIT</h3>
+<ul>
+<li><p>How to commit the snapshots in our stageing area to permanently store in our repository?<br>
+Type <code>git commit -m "YOUR MESSAGE"</code>. Where <code>-m</code> is for the message. A short message that identifies what this snapshot represents. For instance <code>git commit -m "Initial commit</code>.&nbsp; Sometimes a short message is not enough for instance we were working on a bug and we want to explain about something, in this case just type <code>git commit</code>. After you enter a VScode will be open.<br>
+<br>
+Now you find edit the file <strong>COMMIT_EDITMSG</strong> (it is the name of VSCode). On the top you can type a short description (less than 80 character). After that we have a line break (skip a line) and after that we have the long description. Now we save the changes and close the VSCode (by clicking x on top) and back to our terminal and you will see its says the message and how many files has been changes and so on.<br>
+<strong>NOTE</strong><br>
+</p></li>
+<li><p>Comments should not be too big or too small.<br>
+</p></li>
+<li><p>We don’t want to make commit every time we update a file. In other hand we don’t want to code for a couple of days and then make a commit. The whole point of commiting is to record checkpoints as we go. So, if we messed up we always can go back and recover our code. So based on the project your time you spend on your code, you may want to commit. If you work all day, then you may want to commit 5 to 10 times a day.<br>
+</p></li>
+<li><p>As you reach a state that you want to record then make a commit.<br>
+</p></li>
+<li><p>Do not mix the commits. If you are working on a code and fixing a typo and bug. Then you should have two commits one for the bug and one for the typo.<br>
+</p></li>
+<li><p>Use present tense in the commit messages. Instead of saying Fixed the bug, you should say Fix the bug. If you want to use past tense it is fine but make sure you and other team members are use this one.</p></li>
+<li><p><strong>Question</strong> Can we skip the staging area? or do we have to stage our changes before commiting them?<br>
+The answer is no, but you should know what you are doing. Please note that the whole point of staging area is, if there is changes that need to be reviewed. If you are 100% sure that the changes don’t need to be review so you can skip it.<br>
+</p></li>
+<li><p><strong>Question</strong> How to skip staging area?<br>
+Let us go over it by an example. Type <code>echo test &gt;&gt; file1.txt</code><br>
+</p>
+<ul>
+<li>We now skip the <code>git add</code> because we are not putting anything in staging area</li>
+<li>Type <code>git commit -a -m "Right Your Message here"</code> where <code>-a</code> is for all.</li>
+<li>We also can combine both <code>-a</code> and <code>-m</code> together and write <code>git commit -am "Type Your message"</code></li>
+<li>If you look at the message it will tell you how many files was changed and how many insertion we had. If we have lines deleted then we had deletion<br>
+</li>
+</ul>
+<p><strong>What are “insertion” and “deletion”?</strong><br>
+Insertion is the number of lines inserted and deletion is the number of line deleted.</p></li>
+</ul>
+</section>
+<section id="head-pointer" class="level3">
+<h3 class="anchored" data-anchor-id="head-pointer">HEAD POINTER</h3>
+<ul>
+<li><p><em>Head</em> is a reference variable. We call this variable a pointer because its purpose is to reference or point to specific commands to a repository. As you make new comment the pointer changes or move to a new comment.<br>
+</p></li>
+<li><p>The <em>Head</em> always point to the current branch of our repository. Imagine we have 3 versions of a file with commit. Head will point to the last commits that we make. It is the <em>parent</em> of the next commit that we make.</p></li>
+<li><p>Head becomes more important when we start talking about <em>branches</em>. By default the branches that we are working is called <em>master</em> (or sometimes <em>main</em>) branch.</p></li>
+<li><p>If we make a new branch then header moves to commit on this branch.</p></li>
+<li><p>We have ability to move Head back and forth to different branches, so we can write on different branches.</p></li>
+<li><p>Git will keep track of moving the Head around for you.</p></li>
+<li><p>Remember inside of our project folder we have a directory called <code>.git</code> and inside of <code>.git</code> we have <em>Head</em></p>
+<ul>
+<li>Type <code>ls -la .git</code></li>
+<li>To see what is inside of file <em>Head</em>, type <code>cat .git/HEAD</code>. It returns something like “ref:refs/heads/master”</li>
+<li>Type <code>git log</code><br>
+It will provides all changes, commits, authors, and more. You also see that the pointer (HEAD) is pointingthe SHA value to the master branch.</li>
+</ul></li>
+</ul>
+</section>
+<section id="remove-file" class="level3">
+<h3 class="anchored" data-anchor-id="remove-file">REMOVE FILE</h3>
+<p>Let us say that we do not need the “file2.txt” any longer. We use <code>rm</code> command to remove the file. This command is a <strong>UNIX</strong> command.<br>
+- Type <code>rm file2.txt</code><br>
+</p>
+<ul>
+<li><p>Let us now run the <code>git status</code>. It shows that we have one change that is not stage for commit. (Not in staging area). So the file is removed from working directory but still is in staging area. To see this type</p>
+<ul>
+<li><code>git ls-files</code>. These are the files in staging area and you will see that the both files are there.</li>
+<li>Remember whenever we make a changes to a file we have to stage the changes by <code>git add</code> command. Now we have to do that here.<br>
+</li>
+<li>Type again <code>git add file2.txt</code> Now we have report what we have done in working directory and updated the stage area.<br>
+</li>
+<li>Type <code>git ls-files</code> and you will see the “file2.txt” is not in the staging area any longer.<br>
+</li>
+<li>Type <code>git status</code> you will see you have one change ready to be committed and indicated with green font “deleted file2.txt” that means the change is in the staging area and ready to be committed.</li>
+<li>Type <code>git commit -m "Remove unused code"</code>. Now you see in terminal that one file is changed and one is deleted.</li>
+</ul>
+<p><strong>Question:</strong><br>
+Is there any way we can do both these command only with one command?<br>
+Instead of using <code>rm FILE_NAME.txt</code> and <code>git add FILENAME.txt</code> to remove the unwanted file from both directory and staging area. We can use <code>git rm</code> command instead of <code>rm</code> UNIX command, so if you type<br>
+</p>
+<ul>
+<li><code>git rm FILENAME.txt</code> or if you have multiple files you can type</li>
+<li><code>git rm FILENAME1.txt FILENAME2.txt</code> or you can use a pattern</li>
+<li><code>git rm *.txt</code> or whatever the extension of the file is!</li>
+</ul></li>
+</ul>
+</section>
+<section id="renaming-or-moving-files" class="level3">
+<h3 class="anchored" data-anchor-id="renaming-or-moving-files">RENAMING or MOVING FILES</h3>
+<ul>
+<li>Currently we have “file1.txt. in our working directory. We want to rename to”main.js”. We will use the <code>mv</code> command (move from UNIX) to rename file1.txt.<br>
+
+<ul>
+<li>Type <code>mv file1.txt main.js</code>. Then type <code>git status</code> Now we see we have to changes and both of them are unstaged because they are indicated by red font. We have deleted operation “deleted: file1.txt” and we have a new untracked file “main.js”.</li>
+<li>As you know by now, git doesn’t automatically track all your files everytime you have a new file in your project. You have to add it to staging area so git starts tracking it. So, we have to use <code>git add</code> command to stage both these changes.</li>
+<li>Type <code>git add file1.txt</code> and <code>git main.js</code> or you can type <code>git add file1.txt main.js</code></li>
+<li>Now you need to type <code>git status</code>. You will see both files are green which means both are in staging area. Also git recognize that we have renamed file1.txt to main.js. If you look at the terminal you will see “renamed: file1.txt -&gt; main.js”</li>
+<li>So renaming or moving files is a two-step operations. First we have to rename or remove the file from working directory and then we need to stage two types of changes addition and deletion. So, similar to <em>removing</em> file, git gives us special command to do both step in one. It is <code>git mv</code>. Note `git mv OLD-File NEW-File.</li>
+<li>Type <code>git mv main.js file1.js</code>. Now if you type <code>git status</code> you will see the change has applied to both working directory and staging area. Now let us commit the changes type <code>git commit -m "Refactor code"</code> Look at the <em>statistics</em> one file was change with 0 insertion (we didn’t add any new lines to any files) and 0 deletion (we haven’t remove any lines from any files)</li>
+</ul></li>
+</ul>
+</section>
+<section id="ignoring-files" class="level3">
+<h3 class="anchored" data-anchor-id="ignoring-files">IGNORING FILES</h3>
+<p>Almost in every project we have to tell git ignore a certain files and directories. For instance, we don’t want to include log files or binary files. These files are generates as a result of <strong>compiling</strong> our code. Adding these files just increases the size of our repository without adding any valuable information. Let us create a new directory called <strong>logs</strong>. - Create <strong>logs</strong> directory. - Type <code>mkdir logs</code> and then add a log file here, by - <code>echo hello &gt; logs/dev.log</code>. Now let us get the status - <code>git status</code>. Now git saying that we have an untracked directory called logs. <strong>But we don’t want to add this into staging area</strong> Because we don’t want to git to track this. So to prevent this we have to create a special file called <code>.gitignore</code>.<br>
+</p>
+<ul>
+<li>Create <strong><code>.gitignore</code></strong>. This fies has no name just has an extension. It should be in root of your project. So, type
+<ul>
+<li><code>echo logs/ &gt; .gitignore</code>. Now we need to open file using VSCode/</li>
+<li>Type <code>code .gitignore</code> So in this file we have a single entry “logs/”. Which indicates a directory. We can list as many files and directory as we want here for example we can include “main.log”. We can also use pattern like <code>*log</code> (all log files).<br>
+
+<ul>
+<li>In the VSCode underneath of “logs/” type “main.log” and underneath of this one you can write “*.log”</li>
+</ul></li>
+<li>Once we are done we save the changes and back to terminal. Now run<br>
+</li>
+<li><code>git status</code>. You will see that git no longer says that we have a new directory called logs because it is <strong>ignoring it</strong>. Instead it says, we have a <strong>new file</strong> and it called <strong>.gitignore</strong>. Now let’s add this file to staging area and commit our code<br>
+</li>
+<li>Type <code>git add .gitignore</code> and <code>git commit -m "Adding gitignore"</code>.</li>
+</ul></li>
+<li>So this is how git ignores a file or directory. But remember, it works if you have not already included a file or directory in you repository. If you have files added before creating <code>.gitignore</code>, those file will stay in your repository.</li>
+<li>Let me show you what happen in this case by an example. Let us create a new directory called <strong>bin</strong>. Imagine this directory has our compile source code so using the echo command <code>bin/app.bin</code>. And we are going to accidently include this to our repository before creat the ignore file.<br>
+
+<ul>
+<li><p><code>mkdir bin</code></p></li>
+<li><p><code>echo hello &gt; bin/app.bin</code></p></li>
+<li><p><code>git status</code> Now we have anew directory and we want accidentally commit it to our repository</p></li>
+<li><p><code>git add .</code> Remember <code>.</code> means add all the changes</p></li>
+<li><p><code>git commit -m "Add bin."</code>. Here is one problem, every time we <strong>compile</strong> our code git is going to say that the file “bin.app.bin” is changed. (Remember any code your compile its bin will change). Thus we have to stage and commit it.</p></li>
+<li><p>Back to file “.gitignore” we need to <strong>add “bin/”</strong> save it and back to terminal.</p></li>
+<li><p>How to go to “.gitignore” file? You can directly open it or type code<br>
+<code>code .gitignore</code> on terminal.</p></li>
+<li><p><code>git status</code>, you will see you have modified “.gitignore”. (remember we added “bin/”). Now let us stage and commit it.</p></li>
+<li><p><code>git add .</code></p></li>
+<li><p><code>git commit -m "Include bin/ in gitignore."</code>. This time git is not going to ignore changes in this directory. Because it’s already tracking this directory. So Let us modify our bin file by saying</p></li>
+<li><p><code>echo hello world &gt; bin/app.bin</code> look at status</p></li>
+<li><p><code>git status</code>. Git says the file is modified. This is not what we want. We want this file to be ignored. Now we want to remove this file from staging area. Which we are what proposing for the next commit.</p></li>
+<li><p>The command <code>git ls-files</code> shows the files in staging area. As you see the <strong>bin</strong> file (or directory) is in staging area. We should remove it. With remove command (<code>git rm</code>) we can remove a file from both working directory and staging area. But in this case <strong>we don’t want to remove it from working directory</strong>. Why? because this is how we launch our application. So we want to remove it <strong>only from staging area.</strong> How? &nbsp;By using “options” for <code>git rm [option]</code> command.</p>
+<ul>
+<li>Option: <code>--cached</code> We can remove only from the index (or staging area. Index is the old term for staging area).<br>
+</li>
+<li>Option: <code>-r</code> allow recursive removal</li>
+</ul>
+<p>(You can find more help about <code>git rm</code> command by typing <code>git rm -h</code>, where <code>-h</code> means for help. )</p>
+<ul>
+<li><pre><code>`git rm --cached bin/` </code></pre>
+<p>If you just type only option <code>--cached</code>. You will get error ” fatal: not removing ‘bin/’ recursively without -r”. Thus you need to type<br>
+<code>git rm --cached -r bin/</code>. Now the entire directory will be removed from staging area. To verify just type</p></li>
+<li><p><code>git ls-files</code> and you will say the directory bin is not there.</p></li>
+<li><p><code>git status</code> We have one change that is ready to commit. The directory is deleted from staging area.</p></li>
+<li><p><code>git commit -m "Remove the bin directory that accidentally was committed"</code> From now on git will not track changes from this directory. So if we type</p></li>
+<li><p><code>echo test &gt; bin/app.bin</code> and then <code>git status</code> we see nothing to commit and working tree is clean.</p></li>
+</ul>
+<p><strong>If you go to <em>github.com/github/gitignore</em> you can see various “gitignore” template for different programming lnguage. For R is the file “R.gitignore”.</strong></p></li>
+</ul></li>
+</ul>
+</section>
+<section id="short-status" class="level3">
+<h3 class="anchored" data-anchor-id="short-status">SHORT STATUS</h3>
+<p>The command <code>git status -s</code> provides you with a short status. The modified file will be shown by red font capital M and untracked by ?? in red font. For instance if you run <code>git status</code> and you have “Modified: file1.js” and “untracked files: file2.js”. If you run <code>git status -s</code> you will get “M files1.js” and “?? file2.js” The green A means the file is added and green M means the modified file is added.&nbsp; - You may want to look at <code>git status -h</code>. For instance you will see that <code>git status -b</code> gives you information about branch.</p>
+<ul>
+<li>Let us have an example.We are going to modify one file and add a new file
+<ul>
+<li><code>echo sky &gt;&gt; file1.js</code> We are appending sky to the file. Let’s create anew file</li>
+<li><code>echo sky &gt;  file2.js</code>. Now lwt us run the status</li>
+<li><code>git status</code>, it shows we have one modified file and one new file. The outout is very comperhancive but very wordy.</li>
+<li><code>git status -s</code>. It looks much better. We have two columns. The <strong>left column</strong> represent the <strong>staging area</strong> and the <strong>right column</strong> represents the <strong>working directory</strong>.
+<ul>
+<li>We have modified file1, we have some changes but this changes are not in the staging area. It is in the working directory and we don’t have it in staging area. That is why the left column is empty and we have a red M in the second column,</li>
+<li>(Second row) we have two red question marks in both columns.</li>
+</ul></li>
+<li>Now let add file1 to staging area <code>git add file1.js</code>. Now run another short status
+<ul>
+<li><code>git status -s</code>. Now for file1 we have a green M in the left column or in the staging area column. On the right column we don’t have anything. Why? Because we don’t have any extra changes. What happen if we modified file1 another time?</li>
+<li><code>echo ocean &gt;&gt; file1.js</code> and the run the short status <code>git status -s</code>. Now in the lef column we green M, which means we have some changes in the staging area, We also have a red M in the working directory column which indicates we have some changes in the working directory tha are not added to the staging area. Now let us</li>
+<li><code>git add file1.js</code> and then <code>git status -s</code>. Now, we haveonly one green M in the staging area column, It means all changes we have in working directory are in the staging area.</li>
+</ul></li>
+<li>Now let us add file2 to staging area and then run short status
+<ul>
+<li><code>git add file2.js</code> and then <code>git status -s</code>. Now we see that in staging column we have Green M for file1 which indicated is modified and we have Green A for file2 which indicates it is added. If we delete a file it will be denoted by <strong>D</strong>.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="viewing-staged-and-unstaged-changes" class="level3">
+<h3 class="anchored" data-anchor-id="viewing-staged-and-unstaged-changes">VIEWING STAGED AND UNSTAGED CHANGES</h3>
+<p>Before we committing what we have in the staging area we need to <strong>review our code</strong> because we don’t want to commit bad or broken code to our repository.<br>
+</p>
+<ul>
+<li><strong>Question</strong> the <code>status</code> command shows that the files that have been affected. How can we see the exact lines of code that we have staged? We need to use <code>diff</code> command.
+<ul>
+<li><code>git diff --staged</code>. Now we see what we have in staging area. Comparing files using terminal widow is not really the best wey to do it. It is better to use <em>Visual Tools</em>. Let us now explain the output of this command and then we show how to do it by a visual tool.</li>
+<li>At the top you see the diff utility was called. Something<br>
+like <em>diff –git a/file1.js b/file1.js</em> &nbsp; So we are comparing two copiestwo copies of the same file. The first copy <em>a/file1.js</em> is the old one. Which we had in the last commit. and the second copy <em>b/file1.js</em> is what we currently have in the staging area.</li>
+<li>Below that we have <em>index …</em>, which is some metadata and it doesn’t matter.</li>
+<li>Next we have the “legend”. So changes in the old copy are indicated by a <strong>Minus (-)</strong> sign and changes in the new copy indicated by <strong>plus (+)</strong> sign. -Now we have “header” with some information about what part of our file has changed. Our file is very short and we have only a few lines of text. In reality the files can have hundred lines of code. In this case git divide them into chunks and every chunk has header with some information. Here we have only one chunk and one header. We have two segments
+<ul>
+<li><p>The first segment is <em>prefix with a minus sign</em> gives us information about old copy and the second segment is a <em>prefix with a + sign</em> this contains information about new copy, which is what we have in staging area. For instance the header is<br>
+<em>@@ -1,3 +1,5 @<span class="citation" data-cites="*">@*</span><br>
+</em>hello<em><br>
+</em>world<em><br>
+</em>test<em><br>
+</em>+sky<em><br>
+</em>+ocean*<br>
+</p>
+<ul>
+<li>So old copy start from 1 and 3 lines have been extracted <em>-1,3</em><br>
+<em>hello</em><br>
+<em>world</em><br>
+<em>test</em><br>
+</li>
+<li>New copy start from 1 and 5 lines have been extracted So old copy start from 1 and 3 lines have been extracted <em>+1,5</em><br>
+<em>hello</em><br>
+<em>world</em><br>
+<em>test</em><br>
+<em>+sky</em><br>
+<em>+ocean</em><br>
+You see these two lines with + sign (<em>+sky</em>, <em>+ocean</em>) are thelines that we have added in the new copy. They are green which means they are new lines.</li>
+</ul></li>
+</ul></li>
+<li>After that we see that diff utility is comapring two file of file2 and the explanation is exactly the same. But if you look at the legend see we had no old file because it was a new file. So, in the last commit we didn’t have a file called file2.js.&nbsp;
+<ul>
+<li><em>@@ -0,0 +1 @<span class="citation" data-cites="*">@*</span><br>
+</em>+sky*<br>
+</li>
+<li>That is why in this header we have<br>
+<em>-0,0</em> starting from line 0 we have 0 line extracted because there was no old copy of this.<br>
+</li>
+</ul></li>
+</ul></li>
+<li><strong>Question:</strong> How to see the changes in the working directory that are not staged yet? Run diff without any argument.<br>
+
+<ul>
+<li><code>git diff</code> You will see no output here. Why? because we have staged all changes in our working directory. We can verify this with short status command. <code>git status -s</code>. You will see Green M and A.<br>
+
+<ul>
+<li>Example: Let us make a changes to file1.<br>
+
+<ul>
+<li><code>code file1.js</code> It will open the file with VSCode. Let us change the first line to hello world. Now wsave it and get back to terminal. Now run a short status<br>
+</li>
+<li><code>git staus -s</code> For file1 we see we have some changes in the working directory that are not in the staging area. Let us look at this changes with diff command without any argument<br>
+-<code>git diff</code>. So we are comapring two copies of file1. The old copy is what we have in the working directory. Take a look at old copy. We have the line <code>-hello</code> in red which is removed and in the new copy which is what we have in the working&nbsp;directory, we have <code>+ hello world</code> in green (new line).&nbsp;
+<ul>
+<li>If we run <strong><code>git diff</code></strong> we will see unstaged changes&nbsp;</li>
+<li>If we run <strong><code>git diff --staged</code></strong> we will see staged changes that are going to go in the next commit.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="visual-diff-tools" class="level3">
+<h3 class="anchored" data-anchor-id="visual-diff-tools">VISUAL DIFF TOOLS</h3>
+<ul>
+<li>We use visual tools to easily compare files. If you have noticed that we are going to use <code>VSCode</code> because it can be run in both Windows and Mac. We need to tell git that we are going to use VSCode as a default diff tool.
+<ul>
+<li><code>git config --global diff.tool vscode</code>. Then we want to tell how to lunch VSCode.</li>
+<li><code>git config --global difftool.vscode.cmd "code --wait --diff $LOCAL $REMOTE"</code>.<br>
+We are going to lunch <code>code</code> with few arguments
+<ul>
+<li><code>--wait</code> It tells terminal window wait until we are done with VSCode</li>
+<li><code>--diff</code> it tells VSCode that we want to use it for the <code>diff</code> command</li>
+<li><code>$LOCAL</code> and <code>$REMOTE</code> are place holder for old and new copies of the file. So let us to see we got everything right<br>
+</li>
+</ul></li>
+<li><code>git config --global -e</code> With this command we want to <strong>edit our global configuration setting</strong> in our default editor which is VSCode. So we want to take a look to see if everything installed.</li>
+<li>The file <code>.gitignore</code> will be open (VSCode). scroll down to see everything is installed. It is possible in the last line the two <code>$</code> sign argumnets are missing so you just eneter them<br>
+<em>cmd = “code –wait –diff”</em><br>
+<em>cmd = “code –wait –diff $LOCAL $REMOTE”</em>.<br>
+Make sure get this right otherwise it wont work correctly. Let’s save and close the VSCode and back to terminal.<br>
+</li>
+<li>Now we want to use <code>diff</code> command but we want to use visual tool so we use <code>difftool</code>.<br>
+
+<ul>
+<li><code>git --difftool</code> If we want to see unstaged changes<br>
+</li>
+<li><code>git difftool --staged</code> If we want to see staged changes that are going to go in the next commit.<br>
+-In terminal type <code>git difftool</code>. The output says something like *Viewing (1/1): ‘file1.js, which indicates we have modified only one file. a prompt ask you* Launch ’vscode’ [y/n]?&nbsp;
+<ul>
+<li>Go ahead and type <code>y</code> in terminal. There is old copy which is whar we have in the working directory as you can see we can easily tell the line in the left has been replaced with one in the right. It is much easier to see the changes. Let us close the window and back to the terminal and look at the staged changes.<br>
+</li>
+<li><code>git difftool --staged</code>It will show to file has been affected. The output says something like <em>Viewing (1/2):‘file1.js’</em> The first file is <code>file1.js</code>. A prompt ask you <em>Launch ‘vscode’ [y/n]?</em> click <code>y</code>. and you will see the changes in the last command (left collumn) and in the staging area (right column). Let us close it and back to terminal.Then you get <em>Viewing (2/2):‘file2.js’</em> and <em>Launch ‘vscode’ [y/n]?</em> click <code>y</code> to see for the second file. Remeber this file was a new file and it had no old file.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="viewing-the-history" class="level3">
+<h3 class="anchored" data-anchor-id="viewing-the-history">VIEWING THE HISTORY</h3>
+<p>We have made a few comments but where are there. How to get them? - Type <code>git log</code> to look at the history. It gives all the commits that we have created <strong>sorted from latest to earlist</strong>. Each commit has a unique identifier or HASH (a 40 character hexadecimal string) that git generated automatically. The latest commit has a head pointer to master branch <strong>HEAD -&gt; master</strong>, it tells what branch we are currently working. The next line we get the <strong>Author</strong> and the <strong>Date</strong> and the time the commit was created. - use <em>SPACE KEY</em> on your keybord to go to the next page and - use <em>q</em> to quit - To learnmore about log command use <code>git log -h</code> - <code>git log --oneline</code> shows us a short summary - <code>git log --oneline --reverse</code> it will reverse the order</p>
+</section>
+<section id="viewing-a-commit" class="level3">
+<h3 class="anchored" data-anchor-id="viewing-a-commit">VIEWING A COMMIT</h3>
+<ul>
+<li><p><strong>Question:</strong> How to see what we have exactly changed in a given commit? Then the question is how to refernce the commit that we are interested? There are two ways.</p>
+<ol type="1">
+<li>Use its unique identifer number (HASH). You do not need to write the entire number, just a few is enough as long as type enough so it reflects only that commit (not overlapped with any commit’s HASH number)</li>
+</ol>
+<ul>
+<li><code>git show d601b90</code> <em>NOTE: The number I eneterd is just a made up number here. You should look at your commit’s number</em></li>
+</ul>
+<ol start="2" type="1">
+<li>You may use the <em>HEAD</em></li>
+</ol>
+<ul>
+<li><code>git show HEAD</code> It will gives you the info of the latest commit.</li>
+<li><code>git show HEAD~1</code> it gives you the commit before the last one</li>
+<li>To go back 3 step back we type <code>git show HEAD~3</code>. -It will gives us info about the date of commit, the author, message about a diff that what has been changed and so on</li>
+</ul></li>
+<li><p><strong>Question</strong> W]What we need to do if we do not want to see the differences, we just want to see the final version that is stored.</p></li>
+<li><p>Type <code>git show HEAD~1: .gitignore</code> It will gives you the exact version stored in this commit. You mayget something like</p>
+<ul>
+<li><code>logs/</code></li>
+<li><code>main.log</code></li>
+<li><code>*.log</code></li>
+<li><code>bin/</code></li>
+</ul></li>
+<li><p>Remember, each commit contains a complete snapshot of aworking directory. Not just changes. The <code>git show</code> gives you only the differences. Type <code>git show HEAD</code>. <strong>What if we want to see all the files and directories in a commit?</strong> We need to use the <em>TREE</em> command.’</p>
+<ul>
+<li><em>tree</em> is a data structure for representing <em>hierarchical</em>information. In a tree we have <em>nodes</em> and nodes can have <em>childeren</em>. These childrens cn be files and other subdirectories/
+<ul>
+<li>Type <code>git ls-tree HEAD~1</code>. Now you get all the files and directories stored in this commit. the output is the unique identifier and the file and/or tree. Look at the second column, you’ll see that <em>file</em> represent by <em>blob</em> and <em>directories</em> represent by <em>tree</em>.For instance, the <em>.gitignore</em> is a <em>file or blob</em> and <em>bin</em> is a <em>tree</em>./
+<ul>
+<li>If yo use show command and use the unique identifier if the file or directory, it will return the files that you have in that file. For instance if you use the unique identifier of <code>.gitignore</code></li>
+<li><code>git show 1dcc30</code> then the content of the <code>.gitignore</code> file are:
+<ul>
+<li><code>logs/</code></li>
+<li><code>main.log</code></li>
+<li><code>*.log</code></li>
+<li><code>bin/</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="unstaging-files" class="level3">
+<h3 class="anchored" data-anchor-id="unstaging-files">UNSTAGING FILES</h3>
+<ul>
+<li><p>As you have learned we always must review the stuff that we have in the staging area before we making a commit. Run status/</p>
+<ul>
+<li><p><code>git status -s</code>the output shows a <strong>green M in the staging column</strong>.We reviewed these changes and we realized that the changes in the file1 shouldn’t go to the next commit. Perhaps because of these changes are logically part of different task.So we want to <em>undo</em> the <code>add</code> operation. Because earlier we used <code>add</code> command to add addfile1 to the staging area. Now we want to <em>undo</em> this operation. We will use the <code>restore</code> command. Make sure you have version 2.28 or hire, otherwise this command won,t work./</p>
+<ul>
+<li>Note; used to we do reset command and many people find it hard to work. so we are not using it any longer/</li>
+<li>Type <code>git version</code> or <code>git --version</code> to see what is the version of your git./</li>
+</ul></li>
+<li><p>We want to restore file1 in the staging area so type</p>
+<ul>
+<li><code>git restore --staged file1.js</code> . You can type multiple file</li>
+<li><code>git restore --staged file1.js file2.js</code>. You also can use a pattern</li>
+<li><code>git restore --staged *.js</code></li>
+</ul></li>
+<li><p>But we want to restore only file1 so type <code>git restore --staged file1.js</code>. If you runs short status, then you will not see a <strong>Green M is the staging column</strong>. Because all the changes we had in the staging area now they are in the working directory.</p></li>
+<li><p><strong>Question:</strong> How the <code>restore</code> command works? It takes all the copy from the next environment. What is the next environment for staging environment? It is the repository. So when we restored file1 in the staging area git took the last copy of this file from last snapshot and put it in the staging area.</p></li>
+<li><p><strong>Question:</strong> what happen if we restore file 2? If you look at the short status, you’ll see the <em>GREEN A</em> which is short for added to the staging area. This is a new file in the staging area. Since this file is new, it does not exist in the <em>last commit</em>. When we <em>restore</em> this file, git is going to remove it from the staging area and take it back in its previous state which is a new untracked file.</p>
+<ul>
+<li>Type <code>git restore --staged file2.js</code> and then run <code>git status -s</code>. You will see both staging column and working directory columnhave <code>?</code> for the file2.js.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="disgarding-local-change" class="level3">
+<h3 class="anchored" data-anchor-id="disgarding-local-change">DISGARDING LOCAL CHANGE</h3>
+<ul>
+<li>There are times that we have some code in our working directory that we want to throw away. For instance, there are some local changes in the file1.js. <strong>How we can udo these changes?</strong> to undo thses changes we use <code>restore</code> command.
+<ul>
+<li>Type <code>git restore file1.js</code>when we run this command git is going to take the version of this file in the next environment which is the staging environment and copy it to working directory.
+<ul>
+<li><code>git restore .</code> This <strong>undo all the local changes</strong>. If you run <code>git restore .</code> we expect all files to be removed, but if you run short status, you will see still file2 is till there. Why? so file2 is new and <strong>UNTRACKED</strong> file. So, git hasn’t been tracking this file. So, when we tell git to restore this file, git doesn’t know where to get a previous version of this file. The previous version doesn’t exist in our staging environment or in our repository. <strong>HOW to remove untracked file?</strong></li>
+<li>Type <code>git clean</code>. The output of this file is a <strong>FATAL</strong> warning, git tells us this is a dangerous opeation if you accidentally remove these untracked files there is no way you can recover them. We want to remove the <code>file2</code>, but git refuse to do that. What do we need to do?
+<ul>
+<li>Take a look at the clean help file. so type <code>git ckean -h</code>. You will see the option <code>-f</code> <strong>force</strong> git to remove this untracked file. And -d for removing the whole directories So you need to type</li>
+<li><code>git clean -fd</code> then type <code>git status -s</code> you see it’s been removed.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="restoring-a-file-to-an-earlier-version" class="level3">
+<h3 class="anchored" data-anchor-id="restoring-a-file-to-an-earlier-version">RESTORING A FILE TO AN EARLIER VERSION</h3>
+<ul>
+<li><p>You know, once git tracked a file, it stores every version of that file in its database and that means if you screw things, you can always restore a file or a directory to a previous version.</p>
+<ul>
+<li>Let us delete the file one. Type <code>git rm file1.js</code> The command <code>git rm</code> remove the file from both the working directory and staging area.</li>
+<li>Type <code>git stats -s</code> the output shows <strong>Green D</strong> in the first column.</li>
+<li>Commit delete the file `git commit -m “Delete file1.js” Now we just realized we should not do that. - We want to <strong>restore</strong>, so let’s look at the history - <code>git log --oneline</code>, We want to restore file1 to the commit before the last commit. (NOTE: You may want to look at <code>git restore -h</code>)<br>
+- Type <code>git restore --source=HEAD~1 file1.js</code> Now, if you run the short status,/ - <code>git status -s</code> it tells you have a new untracked file</li>
+</ul></li>
+</ul>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
